@@ -1,0 +1,529 @@
+/* styles.css
+ * * Estilos CSS Vanilla mejorados (Versión 4.2).
+ * Incluye:
+ * - Fondo degradado verde/turquesa (Imagen 1).
+ * - Tarjeta de resultados limpia (Imagen 2).
+ * - Corrección de layout en PC (Buscador ancho completo).
+ * - Estilos para el calendario de 30 días.
+ */
+
+/* ----------------------------------------------------- */
+/* 1. Reset, Tipografía y Variables de Color */
+/* ----------------------------------------------------- */
+:root {
+    /* Paleta Menta / Turquesa */
+    --color-fondo-start: #5efce8;
+    --color-fondo-end: #736efe;
+    /* Degradado suave */
+    --bg-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+    
+    --color-card-bg: #ffffff;
+    
+    /* Colores de estado */
+    --color-pico: #ff6b6b;       /* Rojo suave */
+    --color-libre: #00b894;      /* Verde vibrante */
+    --color-primary: #6c5ce7;    /* Morado */
+    --color-primary-hover: #5b4cc4;
+    
+    /* Texto */
+    --color-text-main: #2d3436;
+    --color-text-muted: #636e72;
+    --color-text-light: #ffffff;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--color-text-main);
+    background-image: var(--bg-gradient);
+    background-attachment: fixed; /* Fondo fijo al hacer scroll */
+    min-height: 100vh;
+    padding-bottom: 40px;
+}
+
+/* ----------------------------------------------------- */
+/* 2. Layout y Header */
+/* ----------------------------------------------------- */
+.container {
+    width: 95%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+header {
+    text-align: center;
+    padding: 20px 0 30px;
+}
+
+.header-icon {
+    font-size: 2.5em;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.titulo-principal {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.seo-lead-text-header {
+    font-size: 1em;
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 800px;
+    margin: 0 auto;
+    font-weight: 500;
+}
+
+.ciudad-badge {
+    background-color: #fff;
+    color: var(--color-text-main);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.precio-multa {
+    background-color: var(--color-text-main);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+/* ----------------------------------------------------- */
+/* 3. Tarjetas (Estilo General) */
+/* ----------------------------------------------------- */
+.card {
+    background-color: var(--color-card-bg);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px;
+    border: none;
+}
+
+.card h3 {
+    font-size: 1.2em;
+    color: var(--color-text-main);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ----------------------------------------------------- */
+/* 4. Formulario de Búsqueda (Horizontal) */
+/* ----------------------------------------------------- */
+.busqueda-form-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group-inline {
+    flex: 1;
+}
+
+.form-group-inline input,
+.form-group-inline select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #dfe6e9;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: inherit;
+    color: var(--color-text-main);
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+.form-group-inline input:focus,
+.form-group-inline select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    background-color: #fff;
+}
+
+.btn-primary-inline {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    width: 100%; /* Full width en móvil */
+}
+
+.btn-primary-inline:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-1px);
+}
+
+/* ----------------------------------------------------- */
+/* 5. RESULTADO (Estilo Imagen 2) */
+/* ----------------------------------------------------- */
+.resultado-detalle-card {
+    background-color: #f8f9fa; /* Gris muy claro */
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    border: 1px solid #eee;
+}
+
+.resultado-fecha-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 5px;
+}
+
+.resultado-subtitulo {
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Panel de Información Principal */
+.info-panel {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.info-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 0.95em;
+}
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.info-icon {
+    font-size: 1.2em;
+    margin-right: 12px;
+    min-width: 25px;
+    text-align: center;
+}
+
+.estado-badge {
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    display: inline-block;
+}
+.estado-badge.restriccion {
+    background-color: rgba(255, 107, 107, 0.15);
+    color: #d63031;
+}
+.estado-badge.libre {
+    background-color: rgba(0, 184, 148, 0.15);
+    color: #00b894;
+}
+
+/* Placas */
+.seccion-placas {
+    margin-top: 20px;
+}
+.titulo-placas {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: 10px;
+}
+.placas-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.badge-placa {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1em;
+}
+.badge-placa.rojo {
+    background-color: #ff7675; 
+    color: #fff;
+    box-shadow: 0 3px 6px rgba(255, 118, 117, 0.3);
+}
+.badge-placa.verde {
+    background-color: #55efc4;
+    color: #006266;
+    box-shadow: 0 3px 6px rgba(85, 239, 196, 0.3);
+}
+
+/* Estilos destacados para placa de usuario */
+.badge-placa.rojo-user {
+    background-color: #d63031;
+    color: #fff;
+    transform: scale(1.1);
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(214, 48, 49, 0.5);
+}
+.badge-placa.verde-user {
+    background-color: #00b894;
+    color: #fff;
+    transform: scale(1.1);
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 184, 148, 0.5);
+}
+
+/* ----------------------------------------------------- */
+/* 6. Contador Regresivo (Estilo Tarjeta) */
+/* ----------------------------------------------------- */
+.countdown-section {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.countdown-title {
+    font-size: 0.85em;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.countdown-block {
+    background-color: var(--color-libre); 
+    color: white;
+    padding: 10px 5px;
+    border-radius: 10px;
+    width: 80px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+}
+.countdown-block.ending {
+    background-color: var(--color-pico); 
+}
+
+.countdown-num {
+    font-size: 2em;
+    font-weight: 700;
+    line-height: 1;
+    display: block;
+}
+.countdown-label {
+    font-size: 0.65em;
+    text-transform: uppercase;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+}
+
+.separator {
+    font-size: 2em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    align-self: center;
+    margin-bottom: 15px; 
+    transition: color 0.3s ease;
+}
+
+/* ----------------------------------------------------- */
+/* 7. Selectores y Grid */
+/* ----------------------------------------------------- */
+.grid-ciudades {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.btn-ciudad {
+    padding: 8px 12px;
+    background-color: #fff;
+    border: 1px solid #dfe6e9;
+    border-radius: 6px;
+    color: var(--color-text-main);
+    text-decoration: none;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: all 0.2s;
+    flex: 1 0 auto; 
+    text-align: center;
+}
+.btn-ciudad:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+.btn-ciudad.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+footer {
+    text-align: center;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.85em;
+    margin-top: 40px;
+}
+
+/* ----------------------------------------------------- */
+/* 8. ESTILOS NUEVOS: CALENDARIO 30 DÍAS */
+/* ----------------------------------------------------- */
+.calendario-section {
+    margin-top: 40px;
+}
+.calendario-titulo {
+    text-align: center;
+    font-size: 1.3em;
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.calendario-titulo small {
+    font-size: 0.7em;
+    color: var(--color-text-muted);
+    font-weight: 400;
+    margin-top: 5px;
+}
+
+.calendario-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.calendario-item {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 5px solid #ccc;
+    transition: transform 0.2s;
+}
+.calendario-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* Estados del día */
+.calendario-item.dia-libre {
+    border-left-color: var(--color-libre);
+    background-color: #f0fff4; /* Fondo verde muy claro */
+}
+.calendario-item.dia-restriccion {
+    border-left-color: var(--color-pico);
+    background-color: #fff5f5; /* Fondo rojo muy claro */
+}
+
+.cal-fecha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    margin-right: 15px;
+    border-right: 1px solid rgba(0,0,0,0.05);
+    padding-right: 15px;
+}
+.cal-dia-num {
+    font-size: 1.5em;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-text-main);
+}
+.cal-mes {
+    font-size: 0.7em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+.cal-info {
+    flex: 1;
+}
+.cal-dia-semana {
+    font-weight: 700;
+    font-size: 0.9em;
+    color: var(--color-text-main);
+    margin-bottom: 2px;
+}
+.cal-mensaje {
+    font-size: 0.85em;
+    color: var(--color-text-muted);
+    line-height: 1.3;
+}
+
+/* ----------------------------------------------------- */
+/* 9. Responsive: Corrección de Layout PC */
+/* ----------------------------------------------------- */
+@media (min-width: 768px) {
+    .titulo-principal { font-size: 3em; }
+    
+    .busqueda-form-inline {
+        flex-direction: row;
+        align-items: flex-end;
+    }
+    .btn-primary-inline { width: auto; }
+    
+    /* CORRECCIÓN CLAVE: */
+    /* Main ya NO es grid, para que el bloque 1 (Formulario) ocupe todo el ancho */
+    main { display: block; }
+
+    /* Solo dividimos en columnas el contenido inferior */
+    .layout-grid {
+        display: grid;
+        grid-template-columns: 1.8fr 1.2fr; /* Columna Izq más ancha */
+        gap: 30px;
+        align-items: start;
+    }
+    
+    /* Asegurar que las columnas caigan donde deben */
+    .col-izq { grid-column: 1; }
+    .col-der { grid-column: 2; }
+    
+    /* Ajuste para calendario en grid de 3 columnas en PC */
+    .calendario-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
