@@ -141,3 +141,34 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
 
 .float-game-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: #2d3436; color: white; border-radius: 50%; text-align: center; font-size: 30px; line-height: 60px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-decoration: none; z-index: 100; animation: float 3s infinite ease-in-out; }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+/* Estilos Botón Mañana (SEO Estrategia) */
+.nav-tomorrow-wrapper {
+    text-align: center;
+    margin: -10px auto 20px; /* Subir un poco para acercarlo al header */
+    padding: 0 15px;
+}
+
+.btn-tomorrow-float {
+    display: inline-block;
+    background: linear-gradient(45deg, #ff9f43, #ee5253);
+    color: white;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(238, 82, 83, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.btn-tomorrow-float:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(238, 82, 83, 0.6);
+}
+
+.btn-tomorrow-float strong {
+    text-transform: uppercase;
+    font-weight: 900;
+}

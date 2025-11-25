@@ -11,15 +11,10 @@
     # ----------------------------------------------------------------------
     
     # CASO A: URL antigua SIN tipo de vehículo -> Redirigir a NUEVA con /particulares
-    # Antigua: /pico-y-placa/bogota-24-de-noviembre-de-2025
-    # Nueva:   /pico-y-placa/bogota-24-de-noviembre-de-2025/particulares
-    
     RewriteCond %{REQUEST_URI} ^/pico-y-placa/([a-z-]+)-([0-9]{1,2})-de-([a-z]+)-de-([0-9]{4})/?$
     RewriteRule ^(.*)$ https://picoyplacabogota.com.co/$1/particulares [R=301,L]
 
     # CASO B: URL antigua CON tipo (si existía) -> Asegurar dominio nuevo
-    # Si alguien entra por HTTP o www, forzar HTTPS y sin www (opcional, recomendado para SEO)
-    
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://picoyplacabogota.com.co/$1 [R=301,L]
 
@@ -27,8 +22,11 @@
     # 2. ENRUTAMIENTO DE LA APLICACIÓN (Lógica interna)
     # ----------------------------------------------------------------------
 
+    # --- NUEVA REGLA: Estrategia SEO "Mañana" (Evergreen) ---
+    # URL: /pico-y-placa/bogota/manana/particulares
+    RewriteRule ^pico-y-placa/([a-z-]+)/manana/([a-z-]+)/?$ index.php?ciudad_slug=$1&es_manana=1&tipo=$2 [L,QSA]
+
     # Regla para URLs amigables completas: /pico-y-placa/ciudad-fecha/tipo
-    # Captura: $1=ciudad, $2=día, $3=mes, $4=año, $5=tipo
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^pico-y-placa/([a-z-]+)-([0-9]{1,2})-de-([a-z]+)-de-([0-9]{4})/([a-z-]+)/?$ index.php?ciudad_slug=$1&dia=$2&mes_nombre=$3&ano=$4&tipo=$5 [L,QSA]
