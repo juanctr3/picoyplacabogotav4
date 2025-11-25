@@ -1,7 +1,19 @@
+¡Entendido\! Aquí tienes el archivo `index.php` **completo y listo para usar**.
+
+He integrado absolutamente todo lo que hablamos:
+
+1.  **Lógica "Mañana":** Detecta automáticamente si el usuario quiere ver el día siguiente.
+2.  **SEO Automático:** Cambia los títulos y descripciones para atacar "Pico y placa mañana".
+3.  **Datos Estructurados (Schema):** El código oculto para Google.
+4.  **Botón de Navegación:** El acceso directo visual para los usuarios.
+
+Simplemente copia todo el bloque de abajo, borra lo que tengas en tu `index.php` actual y pega esto:
+
+```php
 <?php
 /**
  * index.php
- * Versión 11.0 Final - SEO Estratégico:
+ * Versión 12.0 Final - SEO Estratégico:
  * - Soporte para URL "Mañana" (Evergreen Content).
  * - Inyección de Schema.org JSON-LD.
  * - Botón de navegación rápida.
@@ -34,7 +46,7 @@ $DIAS_SEMANA = [1=>'lunes',2=>'martes',3=>'miércoles',4=>'jueves',5=>'viernes',
 $es_busqueda = false;
 $es_manana = isset($_GET['es_manana']) && $_GET['es_manana'] == 1;
 
-// Valores por defecto o recibidos por GET
+// Valores por defecto
 $ciudad_busqueda = $_GET['ciudad_slug'] ?? $DEFAULT_CIUDAD_URL;
 $tipo_busqueda = $_GET['tipo'] ?? $DEFAULT_TIPO_URL;
 $fecha_busqueda = $HOY;
@@ -51,13 +63,14 @@ if ($es_manana) {
     if (!array_key_exists($ciudad_busqueda, $ciudades)) $ciudad_busqueda = $DEFAULT_CIUDAD_URL;
     if (!isset($ciudades[$ciudad_busqueda]['tipos'][$tipo_busqueda])) $tipo_busqueda = 'particulares';
     
-    // Canonical forzada para "mañana"
+    // Canonical forzada para "mañana" para que Google indexe esta URL preferentemente
     $canonical_url = $BASE_URL . "/pico-y-placa/$ciudad_busqueda/manana/$tipo_busqueda";
 
 } 
 // Caso B: URL Fecha Específica (Regex Legacy)
 elseif (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/pico-y-placa/') === 0) {
     $slug = explode('/', trim($request_uri_clean, '/'))[1] ?? '';
+    // Regex para detectar formato fecha: bogota-25-de-noviembre-de-2025
     if (preg_match('/^([a-z-]+)-(\d{1,2})-de-([a-z]+)-de-(\d{4})$/', $slug, $m)) {
         $mes_num = array_search($m[3], $MESES);
         if ($mes_num) {
@@ -179,6 +192,26 @@ if ($fecha_busqueda === $HOY) {
                 $next_event_ts = $inicio_ts * 1000;
                 $reloj_titulo = "INICIA EN:";
                 break;
+            }
+        }
+    }
+    // Si hoy no hay eventos cercanos, buscar próximo día con pico
+    if ($next_event_ts == 0) {
+        for ($i = 1; $i <= 15; $i++) { 
+            $nd = date('Y-m-d', strtotime("$HOY +$i days"));
+            $nr = $picoYPlaca->obtenerRestriccion($ciudad_busqueda, $nd, $tipo_busqueda);
+            if ($nr['hay_pico']) {
+                $rangos_next = $ciudades[$ciudad_busqueda]['tipos'][$tipo_busqueda]['rangos_horarios_php'] ?? [];
+                if (!empty($rangos_next)) {
+                    $inicio_ts = strtotime("$nd " . $rangos_next[0]['inicio']);
+                    $next_event_ts = $inicio_ts * 1000;
+                    $ndt = new DateTime($nd);
+                    $d_nombre = $DIAS_SEMANA[$ndt->format('N')];
+                    $d_num = $ndt->format('d');
+                    $placas_prox = implode('-', $nr['restricciones']);
+                    $reloj_titulo = "PRÓXIMA: " . mb_strtoupper("$d_nombre $d_num") . " ($placas_prox)";
+                }
+                break; 
             }
         }
     }
@@ -510,7 +543,7 @@ for ($i = 0; $i < 30; $i++) {
     </main>
 
     <footer class="app-footer">
-        <p>Pico y PL - Colombia 2025 | Versión 11.0</p>
+        <p>Pico y PL - Colombia 2025 | Versión 12.0</p>
         <a href="/juego.php" class="float-game-btn" title="Jugar">🎮</a>
     </footer>
 
@@ -571,3 +604,4 @@ for ($i = 0; $i < 30; $i++) {
     </script>
 </body>
 </html>
+```
