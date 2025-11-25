@@ -5,7 +5,10 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
-
+# --- ESTRATEGIA SEO: MAÑANA (Evergreen) ---
+    # URL: /pico-y-placa/bogota/manana/particulares
+    # Internamente lo mandamos a index.php con una bandera &es_manana=1
+    RewriteRule ^pico-y-placa/([a-z-]+)/manana/([a-z-]+)/?$ index.php?ciudad_slug=$1&es_manana=1&tipo=$2 [L,QSA]
     # ----------------------------------------------------------------------
     # 1. MIGRACIÓN SEO: Redireccionar URLs antiguas a la nueva estructura
     # ----------------------------------------------------------------------
