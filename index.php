@@ -1,15 +1,3 @@
-¡Entendido\! Aquí tienes el archivo `index.php` **completo y listo para usar**.
-
-He integrado absolutamente todo lo que hablamos:
-
-1.  **Lógica "Mañana":** Detecta automáticamente si el usuario quiere ver el día siguiente.
-2.  **SEO Automático:** Cambia los títulos y descripciones para atacar "Pico y placa mañana".
-3.  **Datos Estructurados (Schema):** El código oculto para Google.
-4.  **Botón de Navegación:** El acceso directo visual para los usuarios.
-
-Simplemente copia todo el bloque de abajo, borra lo que tengas en tu `index.php` actual y pega esto:
-
-```php
 <?php
 /**
  * index.php
@@ -375,6 +363,19 @@ for ($i = 0; $i < 30; $i++) {
                 </div>
             </form>
         </section>
+        <?php if (!empty($ciudades[$ciudad_busqueda]['contenido_seo'])): ?>
+        <section class="seo-accordion-wrapper area-seo">
+            <details class="seo-details">
+                <summary class="seo-summary">
+                    ℹ️ <strong>Normativa, Multas y Excepciones en <?= $nombre_ciudad ?></strong>
+                    <span class="icon-toggle">▼</span>
+                </summary>
+                <div class="seo-content">
+                    <?= $ciudades[$ciudad_busqueda]['contenido_seo'] ?>
+                </div>
+            </details>
+        </section>
+        <?php endif; ?>
 
         <?php if($nombre_festivo): ?>
             <section class="festivo-alert-card area-festivo">
@@ -604,4 +605,3 @@ for ($i = 0; $i < 30; $i++) {
     </script>
 </body>
 </html>
-```
