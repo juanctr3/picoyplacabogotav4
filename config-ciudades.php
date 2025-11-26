@@ -1,8 +1,8 @@
 <?php
 /**
  * config-ciudades.php
- * ARCHIVO DE CONFIGURACIÓN SOLAMENTE.
- * No debe contener clases ni lógica compleja.
+ * Versión 12.0 - Con Contenido SEO (Texto Experto)
+ * Incluye textos descriptivos para el Acordeón Semántico.
  */
 
 $rotaciones_base = [
@@ -17,6 +17,14 @@ $rotaciones_base = [
 $ciudades = [
     'bogota' => [
         'nombre' => 'Bogotá',
+        'contenido_seo' => '
+            <p>El <strong>Pico y Placa en Bogotá</strong> opera bajo un esquema de días pares e impares. La medida busca reducir la congestión vehicular y promover la movilidad sostenible.</p>
+            <ul>
+                <li><strong>Horario:</strong> Lunes a viernes de 6:00 a.m. a 9:00 p.m. jornada continua.</li>
+                <li><strong>Excepciones:</strong> Vehículos eléctricos, híbridos y aquellos que paguen el "Pico y Placa Solidario" están exentos. También aplica excepción para carro compartido si se registra previamente (sujeto a cambios).</li>
+                <li><strong>Multa 2025:</strong> La sanción equivale a 15 salarios mínimos diarios legales vigentes (aprox. $650.000 COP) más la inmovilización del vehículo (grúa y patios).</li>
+                <li><strong>Límites:</strong> Aplica en todo el perímetro urbano de la capital.</li>
+            </ul>',
         'tipos' => [
             'particulares' => [
                 'nombre_display' => 'Particulares',
@@ -46,6 +54,13 @@ $ciudades = [
     ],
     'medellin' => [
         'nombre' => 'Medellín',
+        'contenido_seo' => '
+            <p>En <strong>Medellín y el Valle de Aburrá</strong>, la medida rota semestralmente. Es fundamental estar atento a los cambios de dígito cada 6 meses.</p>
+            <ul>
+                <li><strong>Cobertura:</strong> Aplica en Medellín, Envigado, Itagüí, Sabaneta, Bello, Copacabana, Girardota, Barbosa, La Estrella y Caldas.</li>
+                <li><strong>Vías Exentas:</strong> Actualmente la mayoría de vías regionales ya NO tienen exención, consulta el decreto vigente.</li>
+                <li><strong>Exención Verde:</strong> Los vehículos 100% eléctricos e híbridos están exentos de la medida, previo registro en la Secretaría de Movilidad.</li>
+            </ul>',
         'tipos' => [
             'particulares' => [
                 'nombre_display' => 'Particulares',
@@ -69,6 +84,13 @@ $ciudades = [
     ],
     'cali' => [
         'nombre' => 'Cali',
+        'contenido_seo' => '
+            <p>La normativa en <strong>Cali</strong> se caracteriza por rotaciones periódicas y la opción de pagar por circular.</p>
+            <ul>
+                <li><strong>Tasa por Congestión:</strong> Los ciudadanos pueden pagar una tarifa mensual para quedar exentos de la medida de Pico y Placa.</li>
+                <li><strong>Horario:</strong> La restricción suele ser continua o partida dependiendo del decreto del año en curso. Revisa el reloj superior para exactitud.</li>
+                <li><strong>Vehículos Exentos:</strong> Motocicletas (salvo excepciones), vehículos oficiales y de emergencia.</li>
+            </ul>',
         'tipos' => [
             'particulares' => [
                 'nombre_display' => 'Particulares',
@@ -86,6 +108,7 @@ $ciudades = [
     ],
     'barranquilla' => [
         'nombre' => 'Barranquilla',
+        'contenido_seo' => '<p>En Barranquilla, el Pico y Placa aplica principalmente para <strong>Taxis</strong>. Los particulares generalmente no tienen restricción, salvo en carnavales o decretos especiales.</p>',
         'tipos' => [
             'particulares' => [
                 'nombre_display' => 'Particulares',
@@ -254,7 +277,6 @@ $ciudades = [
                 'nombre_display' => 'Taxis',
                 'horario' => '7:00 AM - 3:00 AM (día sig.)',
                 'regla' => 'pereira_taxis',
-                // Horarios partidos para JS
                 'rangos_horarios_php' => [
                     ['inicio' => '7:00 AM', 'fin' => '11:59 PM'],
                     ['inicio' => '00:00 AM', 'fin' => '3:00 AM']
