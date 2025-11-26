@@ -172,3 +172,60 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
     text-transform: uppercase;
     font-weight: 900;
 }
+/* Estilos Acordeón SEO */
+.seo-accordion-wrapper {
+    grid-area: seo; /* Para el grid desktop */
+    margin-bottom: 20px;
+}
+
+.seo-details {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    overflow: hidden;
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.seo-summary {
+    padding: 15px 20px;
+    cursor: pointer;
+    list-style: none; /* Ocultar flecha nativa fea */
+    font-weight: 600;
+    color: #2d3436;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fdfdfd;
+}
+
+.seo-summary::-webkit-details-marker { display: none; } /* Ocultar flecha Chrome */
+
+.seo-content {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: #636e72;
+    background: #fff;
+}
+
+.seo-content p { margin-bottom: 10px; }
+.seo-content ul { margin-left: 20px; list-style-type: disc; }
+.seo-content li { margin-bottom: 5px; }
+
+/* Animación flechita */
+.seo-details[open] .icon-toggle { transform: rotate(180deg); }
+.icon-toggle { transition: transform 0.3s ease; font-size: 0.8em; opacity: 0.6; }
+
+/* Ajuste Grid Desktop para incluir SEO */
+@media (min-width: 1024px) {
+    .app-container {
+        grid-template-areas:
+            "search  status  details"
+            "cities  festivo calc"
+            "seo     seo     seo" /* Ocupa todo el ancho abajo */
+            "info    stats   calendar";
+    }
+    .seo-accordion-wrapper { max-width: 100%; }
+}
