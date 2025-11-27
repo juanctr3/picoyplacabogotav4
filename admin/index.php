@@ -1,7 +1,7 @@
 <?php
 /**
- * admin/index.php - Panel Central de Gestión de Banners
- * Lista todos los banners con opciones para activar/desactivar y enlaza al formulario.
+ * admin/index.php - Panel Central de Gestión de Banners (Con Acciones)
+ * Este panel es el que debe tener los botones de Editar y Desactivar/Activar.
  */
 
 // Reusa la conexión y estilos de reports.php, pero consulta todos los banners.
@@ -10,13 +10,13 @@ require_once 'reports.php';
 // Consulta para obtener TODOS los banners para gestión
 $stmt = $pdo->prepare("
     SELECT 
-        b.id, b.titulo, b.city_slug, b.posicion, b.is_active,
+        b.id, b.titulo, b.city_slugs, b.posicion, b.is_active,
         COALESCE(SUM(CASE WHEN be.event_type = 'impresion' THEN 1 ELSE 0 END), 0) AS total_impresiones,
         COALESCE(SUM(CASE WHEN be.event_type = 'click' THEN 1 ELSE 0 END), 0) AS total_clicks
     FROM banners b
     LEFT JOIN banner_events be ON b.id = be.banner_id
-    GROUP BY b.id, b.titulo, b.city_slug, b.posicion, b.is_active
-    ORDER BY b.is_active DESC, b.city_slug ASC
+    GROUP BY b.id, b.titulo, b.city_slugs, b.posicion, b.is_active
+    ORDER BY b.is_active DESC, b.id ASC
 ");
 $stmt->execute();
 $campanas = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -31,15 +31,17 @@ $status_type = $_GET['status'] ?? null;
     <meta charset="UTF-8">
     <title>Gestión de Banners - Panel Central</title>
     <style>
-        /* Reutiliza los estilos base de reports.php */
+        /* Estilos base */
         body { font-family: sans-serif; padding: 20px; background-color: #f4f7f6; }
         .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 20px; }
-        .actions-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .btn-new { background-color: #2ecc71; color: white; padding: 10px 15px; border: none; border-radius: 4px; text-decoration: none; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { padding: 12px 15px; border: 1px solid #ddd; text-align: left; }
         th { background-color: #3498db; color: white; }
+        
+        /* Estilos de gestión */
+        .actions-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-new { background-color: #2ecc71; color: white; padding: 10px 15px; border: none; border-radius: 4px; text-decoration: none; }
         .active-status { background-color: #e6f7e9; color: #27ae60; font-weight: bold; }
         .inactive-status { background-color: #fcebeb; color: #c0392b; font-weight: bold; }
         .btn-action { padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 0.9em; margin-right: 5px; }
@@ -71,7 +73,7 @@ $status_type = $_GET['status'] ?? null;
                 <tr>
                     <th>ID</th>
                     <th>Título</th>
-                    <th>Ciudad</th>
+                    <th>Ciudades</th>
                     <th>Posición</th>
                     <th>Impresiones</th>
                     <th>Clicks</th>
@@ -85,7 +87,7 @@ $status_type = $_GET['status'] ?? null;
                 <tr class="<?= $status_class ?>">
                     <td><?= $c['id'] ?></td>
                     <td><?= htmlspecialchars($c['titulo']) ?></td>
-                    <td><?= strtoupper($c['city_slug']) ?></td>
+                    <td><?= htmlspecialchars($c['city_slugs']) ?></td>
                     <td><?= ucfirst($c['posicion']) ?></td>
                     <td><?= number_format($c['total_impresiones'], 0, ',', '.') ?></td>
                     <td><?= number_format($c['total_clicks'], 0, ',', '.') ?></td>
