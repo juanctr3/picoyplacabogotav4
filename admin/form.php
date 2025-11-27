@@ -1,12 +1,12 @@
 <?php
 /**
  * admin/form.php - Formulario Unificado de Creación y Edición de Banners
- * Versión Multi-Ciudad: Usa checkboxes para seleccionar varias ciudades.
+ * Solución de Error 500: Incluimos la conexión directamente.
  */
-require_once 'reports.php'; 
+require_once 'db_connect.php'; // CONEXIÓN DIRECTA
+require_once '../config-ciudades.php'; // Para la lista de ciudades
 
-// Lista de ciudades disponibles
-require_once '../config-ciudades.php';
+// Lista de ciudades disponibles (reutilizando la conexión del archivo de reportes)
 $ciudades_disponibles = [];
 foreach ($ciudades as $slug => $data) {
     if ($slug !== 'rotaciones_base') {
@@ -14,7 +14,7 @@ foreach ($ciudades as $slug => $data) {
     }
 }
 
-// Lista de logos aprobados
+// Lista de logos aprobados (optimización anterior)
 $logos_aprobados = [
     '/favicons/apple-icon.png' => 'Semáforo Grande (Icono Principal)',
     '/favicons/favicon-32x32.png' => 'Semáforo Pequeño (32x32)',
@@ -29,7 +29,7 @@ $es_error = false;
 $banner_id = $_GET['id'] ?? null;
 $datos_form = [];
 $modo_edicion = false;
-$banner_ciudades_array = []; // Almacena las ciudades seleccionadas/existentes
+$banner_ciudades_array = []; 
 
 // 1. LÓGICA DE CARGA DE DATOS PARA EDICIÓN
 if ($banner_id) {
@@ -40,8 +40,8 @@ if ($banner_id) {
         $datos_form = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($datos_form) {
-            // Convertir la cadena de ciudades a un array para los checkboxes
-            $banner_ciudades_array = explode(',', $datos_form['city_slugs']);
+            // Convertir la cadena de 'city_slugs' a un array para los checkboxes
+            $banner_ciudades_array = explode(',', $datos_form['city_slugs']); 
         } else {
             $mensaje_estado = "Error: Banner no encontrado.";
             $es_error = true;
@@ -54,7 +54,7 @@ if ($banner_id) {
     }
 }
 
-// Inicializar datos para el modo Creación
+// Inicializar datos para el modo Creación si no hay datos cargados
 if (!$modo_edicion) {
     $datos_form = [
         'city_slugs' => '',
@@ -74,13 +74,10 @@ if (!$modo_edicion) {
 // 2. LÓGICA DE PROCESAMIENTO DEL FORMULARIO (Creación o Edición)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     
-    // Recoger los slugs de las ciudades seleccionadas
-    $selected_cities = $_POST['city_slugs'] ?? [];
-    $city_slugs_string = implode(',', $selected_cities);
-
     // Recoger datos, sanear y limitar a 25/100 (Requisito 11)
+    $selected_cities = $_POST['city_slugs'] ?? [];
     $data_to_save = [
-        'city_slugs' => $city_slugs_string, // Cadena de ciudades para la BD
+        'city_slugs' => implode(',', $selected_cities), 
         'titulo' => substr(trim($_POST['titulo'] ?? ''), 0, 25), 
         'descripcion' => substr(trim($_POST['descripcion'] ?? ''), 0, 100), 
         'logo_url' => trim($_POST['logo_url'] ?? ''), 
@@ -129,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $stmt->execute($data_to_save);
                 
                 $mensaje_estado = "Banner ID {$banner_id} actualizado con éxito.";
-                $modo_edicion = true;
+                $modo_edicion = true; 
             }
         } catch (PDOException $e) {
             $mensaje_estado = "Error de base de datos: " . $e->getMessage();
@@ -144,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <meta charset="UTF-8">
     <title><?= $modo_edicion ? 'Editar Banner ID ' . $banner_id : 'Crear Nuevo Banner' ?></title>
     <style>
-        /* Estilos de reports.php para consistencia */
+        /* Estilos base reutilizados */
         body { font-family: sans-serif; padding: 20px; background-color: #f4f7f6; }
         .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 20px; }
@@ -156,8 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         .char-counter { font-size: 0.8em; color: #7f8c8d; }
         .error-box { background-color: #fcebeb; color: #c0392b; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
         .success-box { background-color: #e6f7e9; color: #27ae60; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
-        .info-box { background-color: #ecf0f1; color: #2c3e50; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
-        /* Nuevos estilos para checkboxes */
+        /* Estilos específicos para checkboxes */
         .city-checkbox-grid { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; padding: 10px; border-radius: 4px; }
         .city-checkbox-grid label { display: inline-flex; align-items: center; font-weight: normal; margin: 0; }
         .city-checkbox-grid input[type="checkbox"] { width: auto; margin-right: 5px; margin-top: 0; }
@@ -269,7 +265,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
         function toggleManualUrl(selectedValue) {
             const wrapper = document.getElementById('logo_url_manual_wrapper');
-            // La opción con valor vacío ('') es "Usar URL manual"
             if (selectedValue === '') {
                 wrapper.style.display = 'block';
             } else {
@@ -283,11 +278,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             
             const select = document.getElementById('logo_url_select');
             
-            // Si no es un valor pre-aprobado, forzamos a mostrar el campo manual
             if (select.value === '') {
                 toggleManualUrl('');
             } else {
-                // Esto es solo para asegurar que al editar se muestre la URL manual si aplica
                 const isApproved = select.querySelector(`option[value='${select.value}']`);
                 if (!isApproved) {
                     toggleManualUrl('');
