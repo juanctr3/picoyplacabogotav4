@@ -16,6 +16,8 @@ ini_set('display_errors', 0);
 require_once 'config-ciudades.php';
 require_once 'clases/PicoYPlaca.php';
 
+
+
 $picoYPlaca = new PicoYPlaca();
 if(isset($ciudades['rotaciones_base'])) unset($ciudades['rotaciones_base']);
 
