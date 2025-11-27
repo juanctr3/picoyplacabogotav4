@@ -322,13 +322,27 @@ for ($i = 0; $i < 30; $i++) {
 </head>
 <body class="<?= $body_class_mode ?>">
 
+
     <div id="install-wrapper">
-        <div id="ios-install-msg" class="ios-tooltip" style="display:none">
-            📲 Para instalar: toca el botón <strong>Compartir</strong> y selecciona <strong>"Agregar a Inicio"</strong>.
+        <div id="android-prompt" class="install-toast" style="display:none">
+            <div style="display:flex; align-items:center;">
+                <span style="font-size:1.5em; margin-right:10px;">📲</span>
+                <div style="text-align:left;">
+                    <div style="font-weight:bold; font-size:0.9em;">Instalar App</div>
+                    <div style="font-size:0.75em; opacity:0.8;">Acceso rápido sin internet</div>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <button id="btn-install-action" class="btn-install-action">INSTALAR</button>
+                <button id="btn-close-install" class="btn-close-install">✕</button>
+            </div>
         </div>
-        <button id="install-btn" class="btn-install-app" style="display:none">
-            <span>📲</span> Instalar App
-        </button>
+
+        <div id="ios-prompt" class="install-toast" style="display:none; flex-direction:column; text-align:center;">
+            <div style="margin-bottom:5px;">📲 <strong>Instalar en iPhone:</strong></div>
+            <div style="font-size:0.85em;">Toca el botón <strong>Compartir</strong> y elige <strong>"Agregar a Inicio"</strong>.</div>
+            <button id="btn-close-ios" class="btn-close-install" style="margin-top:10px;">Cerrar ✕</button>
+        </div>
     </div>
 
     <header class="app-header">
@@ -645,7 +659,49 @@ for ($i = 0; $i < 30; $i++) {
             initPWA();
         });
         
-        function initPWA() { /*...PWA...*/ }
+        let deferredPrompt;
+
+    function initPWA() {
+        const wrapper = document.getElementById('install-wrapper');
+        const androidPrompt = document.getElementById('android-prompt');
+        const iosPrompt = document.getElementById('ios-prompt');
+        const installBtn = document.getElementById('btn-install-action');
+        const closeAndroid = document.getElementById('btn-close-install');
+        const closeIos = document.getElementById('btn-close-ios');
+
+        const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
+
+        // 1. Lógica Android / Chrome
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            wrapper.style.display = 'flex'; // Mostrar contenedor padre
+            androidPrompt.style.display = 'flex'; // Mostrar toast Android
+            
+            installBtn.addEventListener('click', () => {
+                androidPrompt.style.display = 'none';
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    deferredPrompt = null;
+                });
+            });
+            
+            closeAndroid.addEventListener('click', () => {
+                wrapper.style.display = 'none';
+            });
+        });
+
+        // 2. Lógica iOS
+        if (isIos && !isInStandaloneMode) {
+            wrapper.style.display = 'flex';
+            iosPrompt.style.display = 'flex';
+            
+            closeIos.addEventListener('click', () => {
+                wrapper.style.display = 'none';
+            });
+        }
+    }
         function toggleCalendario() {
             const grid = document.getElementById('calendario-grid');
             if(grid.style.display==='none') grid.style.display='grid'; else grid.style.display='none';
