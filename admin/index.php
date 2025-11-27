@@ -1,11 +1,14 @@
 <?php
 /**
- * admin/index.php - Panel Central de Gestión de Banners (Con Acciones)
- * Este panel es el que debe tener los botones de Editar y Desactivar/Activar.
+ * admin/index.php - Panel Central de Gestión de Banners (CON ACCIONES)
+ * Este archivo gestiona las acciones y luego llama al template de gestión.
  */
 
-// Reusa la conexión y estilos de reports.php, pero consulta todos los banners.
-require_once 'reports.php'; 
+// 1. CONEXIÓN A LA BASE DE DATOS (Usando el módulo centralizado)
+require_once 'db_connect.php'; 
+
+// 2. LÓGICA DE GESTIÓN (IDLE O DESPUÉS DE UNA ACCIÓN)
+$mostrar_reportes = isset($_GET['view']) && $_GET['view'] === 'reports';
 
 // Consulta para obtener TODOS los banners para gestión
 $stmt = $pdo->prepare("
@@ -50,15 +53,22 @@ $status_type = $_GET['status'] ?? null;
         .status-message { padding: 10px; border-radius: 4px; margin-bottom: 20px; }
         .success-msg { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .error-msg { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        /* Estilos específicos para la vista de reportes */
+        .reports-link { background-color: #3498db; color: white; margin-left: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="actions-header">
-            <h1>Gestión Central de Campañas ⚙️</h1>
+            <h1><?= $mostrar_reportes ? 'Reportes de Publicidad' : 'Gestión Central de Campañas' ?> ⚙️</h1>
             <div>
-                <a href="reports.php" class="btn-action">Ver Reportes Detallados</a>
-                <a href="form.php" class="btn-new">➕ Crear Nuevo Banner</a>
+                <?php if ($mostrar_reportes): ?>
+                    <a href="index.php" class="btn-action reports-link">← Volver a Gestión</a>
+                <?php else: ?>
+                    <a href="index.php?view=reports" class="btn-action reports-link">Ver Reportes Detallados</a>
+                    <a href="form.php" class="btn-new">➕ Crear Nuevo Banner</a>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -68,42 +78,46 @@ $status_type = $_GET['status'] ?? null;
             </div>
         <?php endif; ?>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Ciudades</th>
-                    <th>Posición</th>
-                    <th>Impresiones</th>
-                    <th>Clicks</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($campanas as $c): ?>
-                <?php $status_class = $c['is_active'] ? 'active-status' : 'inactive-status'; ?>
-                <tr class="<?= $status_class ?>">
-                    <td><?= $c['id'] ?></td>
-                    <td><?= htmlspecialchars($c['titulo']) ?></td>
-                    <td><?= htmlspecialchars($c['city_slugs']) ?></td>
-                    <td><?= ucfirst($c['posicion']) ?></td>
-                    <td><?= number_format($c['total_impresiones'], 0, ',', '.') ?></td>
-                    <td><?= number_format($c['total_clicks'], 0, ',', '.') ?></td>
-                    <td><?= $c['is_active'] ? 'ACTIVO' : 'INACTIVO' ?></td>
-                    <td>
-                        <a href="form.php?id=<?= $c['id'] ?>" class="btn-action">Editar</a>
-                        <?php if ($c['is_active']): ?>
-                            <a href="actions.php?action=deactivate&id=<?= $c['id'] ?>" class="btn-action btn-toggle-off">Desactivar</a>
-                        <?php else: ?>
-                            <a href="actions.php?action=activate&id=<?= $c['id'] ?>" class="btn-action btn-toggle-on">Activar</a>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <?php if ($mostrar_reportes): ?>
+            <?php include 'reports.php'; ?>
+        <?php else: ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Ciudades</th>
+                        <th>Posición</th>
+                        <th>Impresiones</th>
+                        <th>Clicks</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($campanas as $c): ?>
+                    <?php $status_class = $c['is_active'] ? 'active-status' : 'inactive-status'; ?>
+                    <tr class="<?= $status_class ?>">
+                        <td><?= $c['id'] ?></td>
+                        <td><?= htmlspecialchars($c['titulo']) ?></td>
+                        <td><?= htmlspecialchars($c['city_slugs']) ?></td>
+                        <td><?= ucfirst($c['posicion']) ?></td>
+                        <td><?= number_format($c['total_impresiones'], 0, ',', '.') ?></td>
+                        <td><?= number_format($c['total_clicks'], 0, ',', '.') ?></td>
+                        <td><?= $c['is_active'] ? 'ACTIVO' : 'INACTIVO' ?></td>
+                        <td>
+                            <a href="form.php?id=<?= $c['id'] ?>" class="btn-action">Editar</a>
+                            <?php if ($c['is_active']): ?>
+                                <a href="actions.php?action=deactivate&id=<?= $c['id'] ?>" class="btn-action btn-toggle-off">Desactivar</a>
+                            <?php else: ?>
+                                <a href="actions.php?action=activate&id=<?= $c['id'] ?>" class="btn-action btn-toggle-on">Activar</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
     </div>
 </body>
 </html>
