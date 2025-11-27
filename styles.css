@@ -1,4 +1,4 @@
-/* styles.css v12.0 - Final Adjustments */
+/* styles.css v13.1 - FIX: Mostrar descripción en móvil */
 
 :root {
     /* Gradiente Home (Día) */
@@ -143,7 +143,7 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
 /* Estilos Botón Mañana (SEO Estrategia) */
 .nav-tomorrow-wrapper {
     text-align: center;
-    margin: -10px auto 20px; /* Subir un poco para acercarlo al header */
+    margin: -10px auto 20px; 
     padding: 0 15px;
 }
 
@@ -172,7 +172,7 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
 }
 /* Estilos Acordeón SEO */
 .seo-accordion-wrapper {
-    grid-area: seo; /* Para el grid desktop */
+    grid-area: seo; 
     margin-bottom: 20px;
 }
 
@@ -188,7 +188,7 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
 .seo-summary {
     padding: 15px 20px;
     cursor: pointer;
-    list-style: none; /* Ocultar flecha nativa fea */
+    list-style: none; 
     font-weight: 600;
     color: #2d3436;
     display: flex;
@@ -197,7 +197,7 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
     background: #fdfdfd;
 }
 
-.seo-summary::-webkit-details-marker { display: none; } /* Ocultar flecha Chrome */
+.seo-summary::-webkit-details-marker { display: none; } 
 
 .seo-content {
     padding: 20px;
@@ -222,7 +222,7 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
         grid-template-areas:
             "search  status  details"
             "cities  festivo calc"
-            "seo     seo     seo" /* Ocupa todo el ancho abajo */
+            "seo     seo     seo" 
             "info    stats   calendar";
     }
     .seo-accordion-wrapper { max-width: 100%; }
@@ -240,7 +240,7 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
     padding: 10px 25px;
     border-radius: 50px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(8px); /* Efecto vidrio elegante */
+    backdrop-filter: blur(8px); 
     border: 1px solid rgba(255, 255, 255, 0.3);
     transition: bottom 0.3s ease;
 }
@@ -261,17 +261,16 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
 .btn-icon-share:hover { transform: translateY(-5px) scale(1.1); }
 /* Corrección de tamaño SVG */
 .btn-icon-share svg {
-    width: 24px !important;  /* ¡Importante para forzar! */
+    width: 24px !important;  
     height: 24px !important;
     fill: white;
-    display: block; /* Evita espacios fantasma */
-    max-width: 24px; /* Asegura que no crezca */
+    display: block; 
+    max-width: 24px; 
 }
 
 /* Asegurar contenedor de la barra */
 .share-floating-bar {
-    /* ... tus estilos anteriores ... */
-    max-width: 90%; /* Para que no se desborde en móviles */
+    max-width: 90%; 
 }
 
 /* Colores de Marca */
@@ -299,11 +298,11 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
 /* --- AVISO DE INSTALACIÓN DE APP (PWA) --- */
 #install-wrapper {
     position: fixed;
-    bottom: 20px; /* Flotante abajo */
+    bottom: 20px; 
     left: 20px;
     right: 20px;
-    z-index: 1000; /* Por encima de todo */
-    display: none; /* Oculto por defecto, JS lo muestra */
+    z-index: 1000; 
+    display: none; 
     justify-content: center;
 }
 
@@ -348,20 +347,38 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
     padding: 0 5px;
 }
 
-/* stilos de banners*/
-/* --- SISTEMA DE ANUNCIOS TOP (V15.0) --- */
-#top-ad-banner {
+/* --- SISTEMA DE BANNERS FLOTANTES (V1.0 AdSystem) --- */
+.floating-ad-banner {
     position: fixed;
-    top: -150px; /* Escondido arriba */
     left: 0;
     width: 100%;
     background: white;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    z-index: 2000; /* Encima de todo, incluso del header */
-    transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote suave */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    z-index: 2000;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
     display: flex;
     justify-content: center;
-    border-bottom: 3px solid #00b894; /* Línea de color premium */
+    text-decoration: none; 
+    color: var(--text-dark);
+}
+
+/* Posición TOP (Aparece desde arriba) */
+.ad-top {
+    top: 0;
+    transform: translateY(-100%); 
+    border-bottom: 3px solid #00b894;
+}
+
+/* Posición BOTTOM (Aparece desde abajo) */
+.ad-bottom {
+    bottom: 0;
+    transform: translateY(100%); 
+    border-top: 3px solid #6c5ce7;
+}
+
+/* Estado VISIBLE */
+.floating-ad-banner.show {
+    transform: translateY(0);
 }
 
 .ad-content {
@@ -374,9 +391,10 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
     position: relative;
 }
 
+/* Logo */
 .ad-logo-wrapper {
-    flex: 0 0 60px;
-    height: 60px;
+    flex: 0 0 45px;
+    height: 45px;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid #f1f2f6;
@@ -385,51 +403,34 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
     justify-content: center;
     background: #fff;
 }
+.ad-logo { width: 100%; height: 100%; object-fit: cover; }
 
-.ad-logo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* O contain si prefieres que se vea todo el logo */
-}
+/* Texto */
+.ad-text-group { flex: 1; text-align: left; }
+.ad-title { font-weight: 700; color: #2d3436; font-size: 0.95rem; margin-bottom: 0px; display: block; line-height: 1.2; }
+.ad-desc { font-size: 0.75rem; color: #636e72; line-height: 1.2; display: block; }
 
-.ad-text-group {
-    flex: 1;
-    text-align: left;
-}
-
-.ad-title {
-    font-weight: 800;
-    color: #2d3436;
-    font-size: 1rem;
-    margin-bottom: 2px;
-    display: block;
-}
-
-.ad-desc {
-    font-size: 0.8rem;
-    color: #636e72;
-    line-height: 1.2;
-    display: block;
-    margin-bottom: 5px;
-}
-
+/* Botón de Llamada a la Acción (CTA) */
 .ad-cta-btn {
-    background: #e84393; /* Color llamativo (Filedata Pink/Red) */
+    background: linear-gradient(45deg, #ff9f43, #ee5253);
     color: white;
     text-decoration: none;
-    padding: 4px 12px;
+    padding: 6px 12px;
     border-radius: 20px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: bold;
     text-transform: uppercase;
     display: inline-block;
-    box-shadow: 0 2px 5px rgba(232, 67, 147, 0.4);
+    box-shadow: 0 2px 5px rgba(238, 82, 83, 0.4);
+    margin-left: 10px;
+    flex-shrink: 0;
 }
 
+/* Botón Cerrar (X) */
 .ad-close-btn {
     position: absolute;
     top: 5px;
-    right: 10px;
+    right: 5px;
     background: none;
     border: none;
     font-size: 1.2rem;
@@ -437,20 +438,35 @@ body.search-mode { background-image: linear-gradient(180deg, var(--bg-search-sta
     cursor: pointer;
     line-height: 1;
     padding: 0;
+    z-index: 2010; 
 }
 
+/* Botón "Anuncie Aquí" */
+.ad-anuncie-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 35px;
+    font-size: 0.6rem;
+    color: #6c5ce7;
+    text-decoration: underline;
+    font-weight: 600;
+    z-index: 2010;
+}
+
+/* Etiqueta mini "Anuncio" */
 .ad-tag-mini {
     position: absolute;
-    bottom: 2px;
-    right: 5px;
-    font-size: 0.5rem;
+    top: 2px;
+    right: 35px;
+    font-size: 0.6rem;
     color: #dfe6e9;
     background: #636e72;
     padding: 1px 3px;
     border-radius: 2px;
 }
 
-/* Cuando se activa la clase .show, baja */
-#top-ad-banner.show {
-    top: 0;
+/* Optimización para móviles (FIX: ad-desc ahora visible) */
+@media (max-width: 450px) {
+    /* Eliminamos la regla display: none; para .ad-desc */
+    .ad-anuncie-btn, .ad-tag-mini { right: 30px; font-size: 0.6rem; }
 }
